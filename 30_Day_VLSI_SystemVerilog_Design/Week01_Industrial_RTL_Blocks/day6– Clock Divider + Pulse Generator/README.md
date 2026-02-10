@@ -24,3 +24,5 @@ Day06_Clock_Divider_Pulse_Generator/
 - rtl/ : Clock divider and pulse generator
 - tb/  : Self-checking testbench
 - sim/ : Waveform screenshots
+
+----
