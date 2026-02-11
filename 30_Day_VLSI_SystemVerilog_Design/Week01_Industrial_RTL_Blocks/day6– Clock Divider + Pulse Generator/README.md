@@ -17,7 +17,7 @@ generator using SystemVerilog.
 ## Verification
 - Behavioral simulation in Vivado
 - Duty-cycle verification for divided clock
-- Pulse width and reset behavior validated
+- Pulse width and the reset behavior validated
 
 ## Repository Structure
 Day06_Clock_Divider_Pulse_Generator/
