@@ -29,35 +29,94 @@ module alu_tb;
     logic [N-1:0] Y;
     logic Z, C, V;
 
+    int pass_count = 0;
+    int fail_count = 0;
+
+    // DUT
     alu #(N) dut (
-        .A(A), .B(B), .ALU_SEL(ALU_SEL),
-        .Y(Y), .Z(Z), .C(C), .V(V)
+        .A(A),
+        .B(B),
+        .ALU_SEL(ALU_SEL),
+        .Y(Y),
+        .Z(Z),
+        .C(C),
+        .V(V)
     );
 
-    task check(input [N-1:0] exp);
-        if (Y !== exp)
-            $fatal("FAIL: Expected=%0d Got=%0d", exp, Y);
-        else
-            $display("PASS: Result=%0d", Y);
+    // -------------------------------------------------
+    // FUNCTION: Calculate Expected Result
+    // -------------------------------------------------
+    function automatic [N-1:0] expected_result(
+        input [N-1:0] a,
+        input [N-1:0] b,
+        input [2:0] sel
+    );
+        case (sel)
+            3'b000: expected_result = a + b;
+            3'b001: expected_result = a - b;
+            3'b010: expected_result = a & b;
+            3'b011: expected_result = a | b;
+            3'b100: expected_result = a ^ b;
+            default: expected_result = 0;
+        endcase
+    endfunction
+
+    // -------------------------------------------------
+    // TASK: Apply Stimulus
+    // -------------------------------------------------
+    task automatic apply_test(
+        input [N-1:0] a,
+        input [N-1:0] b,
+        input [2:0] sel
+    );
+        A = a;
+        B = b;
+        ALU_SEL = sel;
+        #10;
+
+        check_output(expected_result(a, b, sel));
     endtask
 
+    // -------------------------------------------------
+    // TASK: Check Output
+    // -------------------------------------------------
+    task automatic check_output(
+        input [N-1:0] expected
+    );
+        if (Y === expected) begin
+            pass_count++;
+            $display("PASS | A=%0d B=%0d SEL=%0b RESULT=%0d",
+                      A, B, ALU_SEL, Y);
+        end
+        else begin
+            fail_count++;
+            $display("FAIL | A=%0d B=%0d SEL=%0b EXPECTED=%0d GOT=%0d",
+                      A, B, ALU_SEL, expected, Y);
+        end
+    endtask
+
+    // -------------------------------------------------
+    // TEST SEQUENCE
+    // -------------------------------------------------
     initial begin
-        // ADD
-        A=10; B=20; ALU_SEL=3'b000; #10; check(30);
 
-        // SUB
-        A=30; B=10; ALU_SEL=3'b001; #10; check(20);
+        apply_test(10, 20, 3'b000);   // ADD
+        apply_test(30, 10, 3'b001);   // SUB
+        apply_test(8'hAA, 8'h0F, 3'b010); // AND
+        apply_test(8'hAA, 8'h0F, 3'b011); // OR
+        apply_test(8'hAA, 8'h0F, 3'b100); // XOR
 
-        // AND
-        A=8'hAA; B=8'h0F; ALU_SEL=3'b010; #10; check(8'h0A);
+        // Summary
+        $display("=================================");
+        $display("TOTAL PASSED = %0d", pass_count);
+        $display("TOTAL FAILED = %0d", fail_count);
+        $display("=================================");
 
-        // OR
-        ALU_SEL=3'b011; #10; check(8'hAF);
+        if (fail_count == 0)
+            $display("FINAL RESULT: ALL TESTS PASSED");
+        else
+            $display("FINAL RESULT: TESTS FAILED");
 
-        // XOR
-        ALU_SEL=3'b100; #10; check(8'hA5);
-
-        $display("ALL TESTS PASSED ?");
         $finish;
     end
 
