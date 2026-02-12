@@ -100,24 +100,47 @@ module alu_tb;
     // -------------------------------------------------
     initial begin
 
-        apply_test(10, 20, 3'b000);   // ADD
-        apply_test(30, 10, 3'b001);   // SUB
-        apply_test(8'hAA, 8'h0F, 3'b010); // AND
-        apply_test(8'hAA, 8'h0F, 3'b011); // OR
-        apply_test(8'hAA, 8'h0F, 3'b100); // XOR
+    // ------------------------------
+    // Directed Tests (basic sanity)
+    // ------------------------------
+    apply_test(10, 20, 3'b000);
+    apply_test(30, 10, 3'b001);
+    apply_test(8'hAA, 8'h0F, 3'b010);
+    apply_test(8'hAA, 8'h0F, 3'b011);
+    apply_test(8'hAA, 8'h0F, 3'b100);
 
-        // Summary
-        $display("===============================");
-        $display("TOTAL PASSED = %0d", pass_count);
-        $display("TOTAL FAILED = %0d", fail_count);
-        $display("===============================");
+    // ------------------------------
+    // Corner Case Tests
+    // ------------------------------
+    apply_test(0, 0, 3'b000);          // Zero + Zero
+    apply_test(8'hFF, 1, 3'b000);      // Overflow case
+    apply_test(8'h80, 8'h80, 3'b000);  // Signed overflow
+    apply_test(8'h00, 8'hFF, 3'b001);  // Underflow
 
-        if (fail_count == 0)
-            $display("FINAL RESULT: ALL TESTS PASSED");
-        else
-            $display("FINAL RESULT: TESTS FAILED");
-
-        $finish;
+    // ------------------------------
+    // Random Tests
+    // ------------------------------
+    repeat (20) begin
+        A = $urandom;
+        B = $urandom;
+        ALU_SEL = $urandom % 5;  // valid range 0-4
+        #10;
+        check_output(expected_result(A, B, ALU_SEL));
     end
 
+    // ------------------------------
+    // Summary
+    // ------------------------------
+    $display("=================================");
+    $display("TOTAL PASSED = %0d", pass_count);
+    $display("TOTAL FAILED = %0d", fail_count);
+    $display("=================================");
+
+    if (fail_count == 0)
+        $display("FINAL RESULT: ALL TESTS PASSED");
+    else
+        $display("FINAL RESULT: TESTS FAILED");
+
+    $finish;
+end
 endmodule
