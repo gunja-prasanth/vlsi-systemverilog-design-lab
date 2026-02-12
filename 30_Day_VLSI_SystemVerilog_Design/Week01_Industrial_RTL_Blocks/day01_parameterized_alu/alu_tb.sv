@@ -107,10 +107,10 @@ module alu_tb;
         apply_test(8'hAA, 8'h0F, 3'b100); // XOR
 
         // Summary
-        $display("=================================");
+        $display("===============================");
         $display("TOTAL PASSED = %0d", pass_count);
         $display("TOTAL FAILED = %0d", fail_count);
-        $display("=================================");
+        $display("===============================");
 
         if (fail_count == 0)
             $display("FINAL RESULT: ALL TESTS PASSED");
