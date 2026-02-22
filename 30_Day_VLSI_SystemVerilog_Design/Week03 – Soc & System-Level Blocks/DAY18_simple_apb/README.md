@@ -93,3 +93,22 @@ Testbench performs:
 Simulation performed in Vivado (Behavioral Simulation).
 
 ---
+
+---
+
+## 🎯 Key Learnings
+
+- Implementation of bus protocol FSM
+- Master-slave synchronization
+- Handshake-based transaction control
+- Memory-mapped peripheral modeling
+- Importance of SETUP and ACCESS phase timing
+
+---
+
+## 🚀 Next Improvements (Future Scope)
+
+- Introduce wait states (multi-cycle slave response)
+- Add error response signal
+- Support burst-style transactions
+- Add protocol assertions for formal verification
