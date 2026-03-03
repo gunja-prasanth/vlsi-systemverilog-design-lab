@@ -55,7 +55,7 @@ Structured RTL with scalable design patterns.
 Focus: Becoming verification-aware.
 
 ✔ Self-checking testbenches  
-✔ Tasks & functions in TB  
+✔ Tasks & functions in the TB  
 ✔ Randomized stimulus testing  
 ✔ Assertion-based verification  
 ✔ Synchronous FIFO design  
@@ -156,4 +156,5 @@ It reflects readiness for:
 - SoC design teams  
 
 ---
+
 
