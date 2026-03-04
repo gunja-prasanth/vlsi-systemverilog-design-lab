@@ -18,7 +18,7 @@ Gray-coded pointers, and safe clock domain crossing techniques.
 
 ## Why Gray Code?
 
-In asynchronous FIFO, write and read pointers cross clock domains.
+In the asynchronous FIFO, write and read pointers cross clock domains.
 
 Binary transitions may change multiple bits simultaneously,
 causing incorrect sampling.
