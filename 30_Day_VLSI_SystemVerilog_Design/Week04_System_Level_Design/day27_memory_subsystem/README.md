@@ -9,8 +9,8 @@ Design and verify a simple memory access architecture using SystemVerilog.
 - Data processor
 
 ## Functional Flow
-1. Address generator produces sequential memory addresses.
-2. RAM stores and retrieves data.
+1. Address of generator produces sequential memory addresses.
+2. RAM stores and the retrieves data.
 3. Data processor modifies the retrieved memory data.
 4. Processed data is written back to memory.
 
